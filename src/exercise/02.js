@@ -39,6 +39,7 @@ function useSafeDispatch(dispatch) {
   return React.useCallback(
     (...args) => {
       if (mountedRef.current) dispatch(...args)
+      else void 0
     },
     [dispatch],
   )
@@ -53,6 +54,8 @@ function useAsync(initialState) {
   })
 
   const dispatch = useSafeDispatch(unsafeDispatch)
+
+  const {data, error, status} = state
 
   const run = React.useCallback(
     promise => {
@@ -69,7 +72,7 @@ function useAsync(initialState) {
     [dispatch],
   )
 
-  return {...state, run}
+  return {error, status, data, run}
 }
 
 function PokemonInfo({pokemonName}) {
